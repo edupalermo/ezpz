@@ -7,11 +7,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import org.palermo.ezpz.log.Logger;
+import org.palermo.ezpz.console.Console;
 
 public class ImageUtils {
 	
-	private static Logger logger = new Logger();
+	private static Console logger = new Console();
 	
 	public static Point locate(BufferedImage source, BufferedImage search) {
 		Point location = null;

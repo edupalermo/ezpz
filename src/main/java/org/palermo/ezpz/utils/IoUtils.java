@@ -8,11 +8,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 
 public class IoUtils {
 	
-	public static final void writeObjectToFile(File file, Serializable serializable) {
+	public static final void writeObjectToFile(File file, Object serializable) {
 		ObjectOutputStream oos = null;
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream(file));

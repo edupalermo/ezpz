@@ -1,8 +1,10 @@
 package org.palermo.ezpz.config;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -13,14 +15,36 @@ import javax.imageio.ImageIO;
 import org.palermo.ezpz.Application;
 import org.palermo.ezpz.utils.IoUtils;
 
-public class Configuration implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public enum Configuration implements Serializable {
 	
-	private Map<String, byte[]> images = new HashMap<String, byte[]>();
+	DEFAULT;
+	
+	private final File IMAGES_FILE = new File("image.obj");
+
+	private final File REGIONS_FILE = new File("region.obj");
+
+	private Map<String, byte[]> images = null;
+	
+	private Map<String, Rectangle> regions = null;
 	
 	private final static String FILE_FORMAT = "bmp"; 
 	
+	@SuppressWarnings("unchecked")
+	private Configuration() {
+		if (IMAGES_FILE.exists()) {
+			this.images = (Map<String, byte[]>) IoUtils.readObjectToFile(IMAGES_FILE);
+		}
+		else {
+			this.images = new HashMap<String, byte[]>();
+		}
+		
+		if (REGIONS_FILE.exists()) {
+			this.regions = (Map<String, Rectangle>) IoUtils.readObjectToFile(REGIONS_FILE);
+		}
+		else {
+			this.regions = new HashMap<String, Rectangle>();
+		}
+	}
 	
 	public void saveImage(String name, BufferedImage bi) {
 		ByteArrayOutputStream bos = null; 
@@ -30,6 +54,8 @@ public class Configuration implements Serializable {
 			bos.flush();
 			
 			images.put(name, bos.toByteArray());
+			
+			IoUtils.writeObjectToFile(IMAGES_FILE, this.images);
 		} catch (IOException e) {
 			Application.handleException(e);
 		} finally {
@@ -38,6 +64,7 @@ public class Configuration implements Serializable {
 			}
 		}
 	}
+
 	
 	public BufferedImage loadImage(String name) {
 		
@@ -59,9 +86,30 @@ public class Configuration implements Serializable {
 		return bufferedImage;
 	}
 	
+	public boolean removeImage(String name) {
+		boolean removed = false;
+		
+		if (removed = this.images.remove(name) != null) {
+			IoUtils.writeObjectToFile(IMAGES_FILE, this.images);
+		}
+		return removed;
+	}
+	
 	public Map<String, byte[]> getImages() {
 		return images;
 	}
 	
+	public Map<String, Rectangle> getRegions() {
+		return regions;
+	}
+	
+	public void saveRegion(String name, Rectangle r) {
+		regions.put(name, r);
+		IoUtils.writeObjectToFile(REGIONS_FILE, this.regions);
+	}
+
+	public Rectangle getRegion(String name) {
+		return this.regions.get(name);
+	}
 
 }

@@ -41,6 +41,10 @@ public class MainWindow extends JFrame {
 		this.refreshCapture();
 		
 	}
+	
+	public Navigation getNavigation() {
+		return this.navigation;
+	}
 
 	private void refreshCapture() {
 		Rectangle capture = navigation.getRectangle();
@@ -56,6 +60,10 @@ public class MainWindow extends JFrame {
 			Application.handleException(e);
 		}
 		return bufferedImage;
+	}
+	
+	public Rectangle getRegionOnFocus() {
+		return navigation.getRectangle();
 	}
 	
 	public void loadImage(BufferedImage bufferedImage) {
