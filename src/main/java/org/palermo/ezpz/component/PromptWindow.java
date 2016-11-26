@@ -14,13 +14,17 @@ import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
 import org.palermo.ezpz.console.Console;
-import org.palermo.ezpz.shell.command.ImageFixCommand;
+import org.palermo.ezpz.shell.command.FixClearCommand;
+import org.palermo.ezpz.shell.command.FixCommand;
 import org.palermo.ezpz.shell.command.ImageDeleteCommand;
 import org.palermo.ezpz.shell.command.ImageListCommand;
 import org.palermo.ezpz.shell.command.ImageLoadCommand;
+import org.palermo.ezpz.shell.command.ImageRenameCommand;
 import org.palermo.ezpz.shell.command.ImageSaveCommand;
+import org.palermo.ezpz.shell.command.RegionDeleteCommand;
 import org.palermo.ezpz.shell.command.RegionListCommand;
 import org.palermo.ezpz.shell.command.RegionSaveCommand;
+import org.palermo.ezpz.shell.command.ScreenSaveCommand;
 import org.palermo.ezpz.shell.command.interfaces.Command;
 
 public class PromptWindow extends JFrame {
@@ -35,17 +39,20 @@ public class PromptWindow extends JFrame {
 	private static ArrayList<Command> commandList = new ArrayList<Command>();
 
 	static {
-		commandList.add(new ImageFixCommand());
-
 		commandList.add(new ImageDeleteCommand());
 		commandList.add(new ImageListCommand());
 		commandList.add(new ImageLoadCommand());
 		commandList.add(new ImageSaveCommand());
+		commandList.add(new ImageRenameCommand());
+		
+		commandList.add(new ScreenSaveCommand());
 		
 		commandList.add(new RegionSaveCommand());
 		commandList.add(new RegionListCommand());
+		commandList.add(new RegionDeleteCommand());
 		
-		
+		commandList.add(new FixCommand());
+		commandList.add(new FixClearCommand());
 	}
 
 	public PromptWindow() {

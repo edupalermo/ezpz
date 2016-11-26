@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.palermo.ezpz.Application;
+import org.palermo.ezpz.component.DisplayImageWindow;
 import org.palermo.ezpz.config.Configuration;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
@@ -35,7 +35,9 @@ public class ImageLoadCommand implements Command {
 			console.error("Image [%s] not found!", imageName);
 		}
 		else {
-			Application.mainWindow.loadImage(Configuration.DEFAULT.loadImage(imageName));
+			DisplayImageWindow diw = new DisplayImageWindow(imageName, Configuration.DEFAULT.loadImage(imageName));
+			diw.pack();
+			diw.setVisible(true);
 			console.info("Image [%s] loaded.", imageName);
 		}
 	}

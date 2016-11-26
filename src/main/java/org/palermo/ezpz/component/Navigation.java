@@ -1,13 +1,22 @@
 package org.palermo.ezpz.component;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+
+import org.palermo.ezpz.console.Console;
 
 public class Navigation {
 	
 	private Rectangle limit;
 	
-	private Rectangle rectangle = new Rectangle(10, 10, 100, 100);
+	public static final int INITIAL_WIDTH = 300;
+	public static final int INITIAL_HEIGHT = 200;
+	
+	private Rectangle rectangle = new Rectangle(10, 10, INITIAL_WIDTH, INITIAL_HEIGHT);
+	
+	private Console console = new Console();
 	
 	public void fixPoint(int x, int y) {
 		if (limit == null) {
@@ -27,12 +36,46 @@ public class Navigation {
 		this.limit.height = height;
 	}
 	
-	public void clearRegion() {
+	public Rectangle getScreen() {
+		Rectangle answer = null;
+		if (this.limit == null) {
+			Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize(); 
+			this.limit = new Rectangle(0, 0, (int) dimension.getWidth(), (int)dimension.getHeight());
+		}
+		else {
+			answer = this.limit; 
+		}
+		return answer;
+	}
+	
+	public void clearFix() {
 		this.limit = null;
 	}
 	
-	public Rectangle getRectangle() {
+	public Rectangle getRegionOnFocus() {
 		return rectangle;
+	}
+	
+	public Rectangle getRelativeRegionOnFocus() {
+		Rectangle answer = null;
+		if (limit == null) {
+			answer = rectangle;
+		}
+		else {
+			answer = new Rectangle(rectangle.x - limit.x, rectangle.y - limit.y, rectangle.width, rectangle.height);
+		}
+		
+		return answer;
+	}
+	
+	public void setRegionOnFocus(Rectangle input) {
+		if (limit == null) {
+			rectangle = input;
+		}
+		else {
+			rectangle = new Rectangle(limit.x + input.x, limit.y + input.y, input.width, input.height);
+		}
+		
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -71,16 +114,19 @@ public class Navigation {
 			}
 		}
 
-		
-		if (this.limit == null) {
-			if (rectangle.x < 0) {
-				rectangle.x = 0;
-			}
-			if (rectangle.y < 0) {
-				rectangle.y = 0;
-			}
+
+		if (rectangle.x < 0) {
+			rectangle.x = 0;
 		}
-		else {
+		if (rectangle.width < 0) {
+			rectangle.width = 0;
+		}
+		if (rectangle.height < 0) {
+			rectangle.height = 0;
+		}
+
+		
+		if (this.limit != null) {
 			if (rectangle.x < this.limit.x) {
 				rectangle.x = limit.x;
 			}
@@ -99,18 +145,15 @@ public class Navigation {
 			
 			
 			if (rectangle.x + rectangle.width > this.limit.x + this.limit.width) {
-				rectangle.width = (this.limit.x + this.limit.width) - (rectangle.x + rectangle.width); 
+				rectangle.width = rectangle.width - ((rectangle.x + rectangle.width) - (this.limit.x + this.limit.width)); 
 			}
 			
 			if (rectangle.y + rectangle.height > this.limit.y + this.limit.height) {
-				rectangle.height = (rectangle.y + rectangle.height) - (this.limit.y + this.limit.height); 
+				rectangle.height = rectangle.height - ((rectangle.y + rectangle.height) - (this.limit.y + this.limit.height)); 
 			}
+			
 		}
-		
-		
-		
-		
-		
+		console.info("Limits [%d, %d, %d, %d]", rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 	
 	

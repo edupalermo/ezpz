@@ -29,7 +29,7 @@ public class ImageSaveCommand implements Command {
 
 	
 	private void execute(String imageName) {
-		Configuration.DEFAULT.saveImage(imageName, Application.mainWindow.getBufferedImageOnFocus());
+		Configuration.DEFAULT.saveImage(imageName, Application.mainWindow.getNavigation().getImageOnFocus());
 		console.info("Image [%s] saved with size [%d] bytes.", imageName, Configuration.DEFAULT.getImages().get(imageName).length);
 
 	}

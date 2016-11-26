@@ -11,12 +11,14 @@ import org.palermo.ezpz.console.Console;
 
 public class ImageUtils {
 	
-	private static Console logger = new Console();
+	//private static Console console = new Console();
 	
 	public static Point locate(BufferedImage source, BufferedImage search) {
 		Point location = null;
 		
 		double minTax = Double.MAX_VALUE;
+		
+		//double higherDifference = 3 * 255 * (search.getWidth() * search.getHeight());
 		
 		for (int y = 0; y < source.getHeight() - (search.getHeight() - 1); y++) {
 			for (int x = 0; x < source.getWidth() - (search.getWidth() - 1); x++) {
@@ -25,23 +27,8 @@ public class ImageUtils {
 				
 				if (newTax < minTax) {
 					minTax = newTax;
-					logger.info("New minTax (%d, %d) %3.0f",x, y, minTax);
+					// console.info("New minTax (%d, %d) %1.6f\\%", x, y, (minTax / higherDifference));
 					location = new Point(x, y);
-				}
-			}
-		}
-		return location;
-		
-	}
-
-	public static Point oldLocate(BufferedImage source, BufferedImage search) {
-		Point location = null;
-		
-		search : for (int y = 0; y < source.getHeight() - (search.getHeight() - 1); y++) {
-			for (int x = 0; x < source.getWidth() - (search.getWidth() - 1); x++) {
-				if (areTheSame(x, y, source, search)) {
-					location = new Point(x, y);
-					break search;
 				}
 			}
 		}
@@ -63,7 +50,7 @@ public class ImageUtils {
 		return same;
 	}
 	
-	private static double checkSimilarity(int px, int py, BufferedImage source, BufferedImage search, double kill) {
+	public static double checkSimilarity(int px, int py, BufferedImage source, BufferedImage search, double kill) {
 		double tax = 0;
 		
 		loop: for (int x = 0; x < search.getWidth(); x++) {
@@ -71,9 +58,9 @@ public class ImageUtils {
 				int sourceRgb = source.getRGB(x + px, y + py);
 				int searchRgb = search.getRGB(x, y);
 				
-				tax += Math.sqrt(Math.pow((sourceRgb & 0xFF) - (searchRgb & 0xFF), 2) + 
-						Math.pow(((sourceRgb >> 8) & 0xFF) - ((searchRgb >> 8) & 0xFF), 2) + 
-						Math.pow(((sourceRgb >> 16) & 0xFF) - ((searchRgb >> 16) & 0xFF), 2));
+				tax += Math.abs((sourceRgb & 0xFF) - (searchRgb & 0xFF)) + 
+						Math.abs(((sourceRgb >> 8) & 0xFF) - ((searchRgb >> 8) & 0xFF)) + 
+						Math.abs(((sourceRgb >> 16) & 0xFF) - ((searchRgb >> 16) & 0xFF));
 				
 				if (tax > kill) {
 					break loop;

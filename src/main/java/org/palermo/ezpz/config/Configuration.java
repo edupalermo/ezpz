@@ -50,7 +50,7 @@ public enum Configuration implements Serializable {
 		ByteArrayOutputStream bos = null; 
 		try {
 			bos = new ByteArrayOutputStream();
-			ImageIO.write(Application.mainWindow.getBufferedImageOnFocus(), FILE_FORMAT, bos);
+			ImageIO.write(Application.mainWindow.getNavigation().getImageOnFocus(), FILE_FORMAT, bos);
 			bos.flush();
 			
 			images.put(name, bos.toByteArray());
@@ -86,13 +86,28 @@ public enum Configuration implements Serializable {
 		return bufferedImage;
 	}
 	
-	public boolean removeImage(String name) {
+	public boolean deleteImage(String name) {
 		boolean removed = false;
 		
 		if (removed = this.images.remove(name) != null) {
 			IoUtils.writeObjectToFile(IMAGES_FILE, this.images);
 		}
 		return removed;
+	}
+	
+	public boolean renameImage(String oldName, String newName) {
+		boolean renamed = false;
+		
+		byte imageBytes[] = null;
+		
+		if ( (!this.images.containsKey(newName)) && 
+				((imageBytes = this.images.remove(oldName)) != null) ) {
+			this.images.put(newName, imageBytes);
+			IoUtils.writeObjectToFile(IMAGES_FILE, this.images);
+			renamed = true;
+		}
+		
+		return renamed;
 	}
 	
 	public Map<String, byte[]> getImages() {
@@ -110,6 +125,15 @@ public enum Configuration implements Serializable {
 
 	public Rectangle getRegion(String name) {
 		return this.regions.get(name);
+	}
+
+	public boolean deleteRegion(String name) {
+		boolean removed = false;
+		
+		if (removed = this.regions.remove(name) != null) {
+			IoUtils.writeObjectToFile(REGIONS_FILE, this.regions);
+		}
+		return removed;
 	}
 
 }
