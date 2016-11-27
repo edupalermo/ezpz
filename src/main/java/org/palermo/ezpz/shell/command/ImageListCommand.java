@@ -2,12 +2,14 @@ package org.palermo.ezpz.shell.command;
 
 import java.awt.image.BufferedImage;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.palermo.ezpz.config.Configuration;
+import org.palermo.ezpz.config.ImageDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
+import org.palermo.ezpz.utils.IoUtils;
 import org.palermo.ezpz.utils.StringUtils;
 
 public class ImageListCommand implements Command {
@@ -31,14 +33,14 @@ public class ImageListCommand implements Command {
 
 	
 	private void execute() {
-		Map<String, byte[]> map = Configuration.DEFAULT.getImages();
-		if (map.size() == 0) {
+		Set<Map.Entry<String, byte[]>> entries = ImageDao.getEntries();
+		if (entries.size() == 0) {
 			console.error("There is no images recorded!");
 		}
 		else {
 			int largeImageNameSize = this.getLargeImageName();
-			for (Map.Entry<String, byte[]> entry : map.entrySet()) {
-				BufferedImage bi = Configuration.DEFAULT.loadImage(entry.getKey());
+			for (Map.Entry<String, byte[]> entry : entries) {
+				BufferedImage bi = IoUtils.bytesToBufferedImage(entry.getValue());
 				console.plain("%s - %4d x %4d", 
 						StringUtils.rpad(entry.getKey(), largeImageNameSize, ' '), 
 						bi.getWidth(), bi.getHeight());
@@ -48,7 +50,7 @@ public class ImageListCommand implements Command {
 	
 	private int getLargeImageName() {
 		int bigger = 0;
-		for (String name : Configuration.DEFAULT.getImages().keySet()) {
+		for (String name : ImageDao.getNames()) {
 			bigger = Math.max(bigger, name.length());
 		}
 		return bigger;

@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 import javax.swing.SwingWorker;
 
 import org.palermo.ezpz.Application;
-import org.palermo.ezpz.config.Configuration;
+import org.palermo.ezpz.config.ImageDao;
+import org.palermo.ezpz.config.RegionDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
 import org.palermo.ezpz.utils.ImageUtils;
@@ -33,13 +34,13 @@ public class FixCommand implements Command {
 
 	private void execute(String imageName, String regionName) {
 		
-		BufferedImage bufferedImage = Configuration.DEFAULT.loadImage(imageName); 
+		BufferedImage bufferedImage = ImageDao.get(imageName); 
 		if (bufferedImage == null) {
 			console.error("Image [%s] not recorded! ", imageName);
 			return;
 		}
 		
-		Rectangle region = Configuration.DEFAULT.getRegion(regionName);
+		Rectangle region = RegionDao.get(regionName);
 		
 		if (region == null) {
 			console.error("Region [%s] not recorded! ", imageName);

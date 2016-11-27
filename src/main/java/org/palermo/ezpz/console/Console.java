@@ -33,4 +33,8 @@ public class Console {
 		Application.logHistory(String.format("ERROR: %s\n", message));
 	}
 
+	public void warn(String message) {
+		Application.logHistory(String.format("WARN: %s\n", message));
+	}
+
 }

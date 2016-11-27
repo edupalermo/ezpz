@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.text.DefaultCaret;
 
 import org.palermo.ezpz.console.Console;
+import org.palermo.ezpz.shell.command.CaptureStartCommand;
+import org.palermo.ezpz.shell.command.CaptureStopCommand;
 import org.palermo.ezpz.shell.command.FixClearCommand;
 import org.palermo.ezpz.shell.command.FixCommand;
 import org.palermo.ezpz.shell.command.ImageDeleteCommand;
@@ -53,6 +55,9 @@ public class PromptWindow extends JFrame {
 		
 		commandList.add(new FixCommand());
 		commandList.add(new FixClearCommand());
+		
+		commandList.add(new CaptureStartCommand());
+		commandList.add(new CaptureStopCommand());
 	}
 
 	public PromptWindow() {

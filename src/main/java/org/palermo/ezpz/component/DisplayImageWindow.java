@@ -1,12 +1,17 @@
 package org.palermo.ezpz.component;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import org.palermo.ezpz.bean.Mask;
 
 public class DisplayImageWindow extends JFrame {
 
@@ -15,6 +20,13 @@ public class DisplayImageWindow extends JFrame {
 	private JPanel panel;
 	
 	private BufferedImage bufferedImage = null;
+	
+	private List<Point> exclusions = null;
+	
+	public DisplayImageWindow(String windowName, Mask mask) {
+		this(windowName, mask.getTemplate());
+		exclusions = mask.getExclusions();
+	}
 
 	public DisplayImageWindow(String windowName, BufferedImage bufferedImage) {
 		super();
@@ -47,6 +59,14 @@ public class DisplayImageWindow extends JFrame {
 			@Override
 		    protected void paintComponent(Graphics g) {
 				g.drawImage(bufferedImage, 0, 0, this);
+				
+				if (exclusions != null) {
+					g.setColor(Color.WHITE);
+					
+					for (Point point : exclusions) {
+						g.drawRect(point.x, point.y, 1, 1);
+					}
+				}
 		    }
 		};
 	}

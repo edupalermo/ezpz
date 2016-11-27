@@ -3,7 +3,7 @@ package org.palermo.ezpz.shell.command;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.palermo.ezpz.config.Configuration;
+import org.palermo.ezpz.config.RegionDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
 
@@ -28,7 +28,7 @@ public class RegionDeleteCommand implements Command {
 
 	
 	private void execute(String name) {
-		if (Configuration.DEFAULT.deleteRegion(name)) {
+		if (RegionDao.delete(name)) {
 			console.info("Region [%s] removed and database updated.", name);
 		}
 		else {

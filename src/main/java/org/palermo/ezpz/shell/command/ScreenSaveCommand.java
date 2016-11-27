@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.palermo.ezpz.Application;
-import org.palermo.ezpz.config.Configuration;
+import org.palermo.ezpz.config.ImageDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
 
@@ -29,8 +29,8 @@ public class ScreenSaveCommand implements Command {
 
 	
 	private void execute(String imageName) {
-		Configuration.DEFAULT.saveImage(imageName, Application.mainWindow.getScrren());
-		console.info("Image [%s] saved with size [%d] bytes.", imageName, Configuration.DEFAULT.getImages().get(imageName).length);
+		ImageDao.save(imageName, Application.mainWindow.getScrren());
+		console.info("Image [%s] saved.", imageName);
 
 	}
 }

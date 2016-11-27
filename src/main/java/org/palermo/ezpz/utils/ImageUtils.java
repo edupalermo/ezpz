@@ -7,8 +7,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import org.palermo.ezpz.console.Console;
-
 public class ImageUtils {
 	
 	//private static Console console = new Console();
@@ -48,6 +46,10 @@ public class ImageUtils {
 			}
 		}
 		return same;
+	}
+
+	public static boolean areTheSame(BufferedImage source, BufferedImage search) {
+		return areTheSame(0, 0, source, search);
 	}
 	
 	public static double checkSimilarity(int px, int py, BufferedImage source, BufferedImage search, double kill) {

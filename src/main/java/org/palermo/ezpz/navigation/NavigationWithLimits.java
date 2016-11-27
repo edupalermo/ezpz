@@ -1,8 +1,6 @@
 package org.palermo.ezpz.navigation;
 
-import java.awt.AWTException;
 import java.awt.Rectangle;
-import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 

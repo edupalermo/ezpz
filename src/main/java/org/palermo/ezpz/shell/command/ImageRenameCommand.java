@@ -1,10 +1,10 @@
 package org.palermo.ezpz.shell.command;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.palermo.ezpz.config.Configuration;
+import org.palermo.ezpz.config.ImageDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
 
@@ -26,19 +26,19 @@ public class ImageRenameCommand implements Command {
 
 	
 	private void execute(String oldName, String newName) {
-		Map<String, byte[]> images = Configuration.DEFAULT.getImages();
+		Set<String> names = ImageDao.getNames();
 		
-		if (!images.containsKey(oldName)) {
+		if (!names.contains(oldName)) {
 			console.error("Image [%s] does not exist", oldName);
 			return;
 		}
 		
-		if (images.containsKey(newName)) {
+		if (names.contains(newName)) {
 			console.error("Cannot overwrite image [%s]", newName);
 			return;
 		}
-
-		images.put(newName, images.remove(oldName));
+		
+		ImageDao.rename(oldName, newName);
 		console.info("Image [%s] renamed to [%s]", oldName, newName);
 	}
 }

@@ -1,17 +1,16 @@
 package org.palermo.ezpz.shell.command;
 
-import java.awt.Rectangle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.palermo.ezpz.Application;
-import org.palermo.ezpz.config.RegionDao;
 import org.palermo.ezpz.console.Console;
 import org.palermo.ezpz.shell.command.interfaces.Command;
+import org.palermo.ezpz.threads.ScreenCaptureWorker;
 
-public class RegionSaveCommand implements Command {
+public class CaptureStopCommand implements Command {
 	
-	private final static Pattern PATTERN = Pattern.compile("region save (\\w+)"); 
+	private final static Pattern PATTERN = Pattern.compile("capture stop"); 
 	
 	private Console console = new Console();
 	
@@ -29,9 +28,16 @@ public class RegionSaveCommand implements Command {
 	}
 
 	
-	private void execute(String regionName) {
-		Rectangle r = Application.mainWindow.getRegionOnFocus();
-		RegionDao.save(regionName, r);
-		console.info("Region [%s] saved with specs [%d, %d, %d, %d].", regionName, r.x, r.y, r.width, r.height);
+	private void execute(String imageName) {
+		
+		ScreenCaptureWorker screenCaptureWorker = Application.screenCaptureWorker;
+		
+		if (screenCaptureWorker == null) {
+			console.error("ScreenCapture is not running.");
+		}
+		else {
+			screenCaptureWorker.cancel(false);
+			console.info("Trying to stop ScreenCapture worker...");
+		}
 	}
 }

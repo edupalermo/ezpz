@@ -7,13 +7,14 @@ import javax.swing.JOptionPane;
 
 import org.palermo.ezpz.component.MainWindow;
 import org.palermo.ezpz.component.PromptWindow;
+import org.palermo.ezpz.threads.ScreenCaptureWorker;
 
 public class Application {
 
 	public static MainWindow mainWindow = null;
 	public static PromptWindow promptWindow = null;
-
 	public static Robot robot = null;
+	public static ScreenCaptureWorker screenCaptureWorker = null;
 
 	public static void main(String[] args) {
 
